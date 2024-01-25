@@ -59,6 +59,7 @@ func (r *JsonFileResource) Schema(ctx context.Context, req resource.SchemaReques
 				Required: true,
 			},
 			"nested": schema.ListNestedAttribute{
+				Optional: true,
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
