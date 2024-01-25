@@ -19,7 +19,7 @@ func TestAccExampleResource(t *testing.T) {
 				Config: testAccExampleResourceConfig(),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr("jsonfile_data.data", "value", "test"),
-					resource.TestCheckResourceAttr("jsonfile_data.data", "nested.0.fixed", "fixed"),
+					resource.TestCheckResourceAttr("jsonfile_data.data", "nested.fixed", "fixed"),
 				),
 			},
 		},

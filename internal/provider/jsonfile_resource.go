@@ -29,7 +29,7 @@ type JsonFileResource struct {
 
 type JsonFileResourceModel struct {
 	Value  types.String `tfsdk:"value"`
-	Nested types.List   `tfsdk:"nested"`
+	Nested types.Object `tfsdk:"nested"`
 }
 
 type JsonFileStruct struct {
@@ -58,19 +58,14 @@ func (r *JsonFileResource) Schema(ctx context.Context, req resource.SchemaReques
 			"value": schema.StringAttribute{
 				Required: true,
 			},
-			"nested": schema.ListNestedAttribute{
+			"nested": schema.SingleNestedAttribute{
 				Optional: true,
 				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"fixed": schema.StringAttribute{
-							Computed: true,
-						},
-						"time": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  stringdefault.StaticString("banana"),
-						},
+				Attributes: map[string]schema.Attribute{
+					"time": schema.StringAttribute{
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString("1970-01-01 00:00:00"),
 					},
 				},
 			},
@@ -100,14 +95,10 @@ func (r *JsonFileResource) Create(ctx context.Context, req resource.CreateReques
 }
 
 func fillNested(data *JsonFileResourceModel) {
-	nestedType := map[string]attr.Type{"time": types.StringType, "fixed": types.StringType}
-	data.Nested = types.ListValueMust(types.ObjectType{AttrTypes: nestedType},
-		[]attr.Value{
-			types.ObjectValueMust(nestedType,
-				map[string]attr.Value{
-					"time":  types.StringValue(time.Now().String()),
-					"fixed": types.StringValue("fixed"),
-				}),
+	nestedType := map[string]attr.Type{"time": types.StringType}
+	data.Nested = types.ObjectValueMust(nestedType,
+		map[string]attr.Value{
+			"time": types.StringValue(time.Now().String()),
 		})
 }
 
