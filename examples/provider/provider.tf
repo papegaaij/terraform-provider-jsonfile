@@ -11,4 +11,7 @@ provider "jsonfile" {
 
 resource "jsonfile_data" "data" {
   value = "test 2"
+#  nested = [{
+#    fixed = "fixed"
+#  }]
 }
